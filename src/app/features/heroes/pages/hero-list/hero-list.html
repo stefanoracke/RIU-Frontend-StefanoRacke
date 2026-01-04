@@ -1,1 +1,29 @@
-<p>hero-list works!</p>
+@if(heroes$ | async; as response){
+<table mat-table [dataSource]="response.items" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="power">
+    <th mat-header-cell *matHeaderCellDef>Poder</th>
+    <td mat-cell *matCellDef="let element">{{ element.power }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="alterEgo">
+    <th mat-header-cell *matHeaderCellDef>Alter ego</th>
+    <td mat-cell *matCellDef="let element">{{ element.alterEgo }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<mat-paginator
+  [length]="response.total"
+  [pageSize]="8"
+  [pageSizeOptions]="[8, 10, 20]"
+  aria-label="Seleccionar página"
+>
+</mat-paginator>
+}
