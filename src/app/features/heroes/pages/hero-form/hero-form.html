@@ -1,1 +1,41 @@
-<p>hero-form works!</p>
+<div class="form-container">
+  <h2>{{ isEdit ? 'Editar Héroe' : 'Crear Héroe' }}</h2>
+
+  @if(heroService.isLoading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>{{ isEdit ? 'Cargando héroe...' : 'Guardando...' }}</p>
+    </div>
+  } @else {
+    <form [formGroup]="heroForm" (ngSubmit)="save()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" placeholder="Ingresa el nombre del héroe">
+        @if(heroForm.get('name')?.invalid && heroForm.get('name')?.touched) {
+          <mat-error>El nombre es requerido y debe tener al menos 2 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Poder</mat-label>
+        <input matInput formControlName="power" placeholder="Ingresa el poder del héroe">
+        @if(heroForm.get('power')?.invalid && heroForm.get('power')?.touched) {
+          <mat-error>El poder es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Alter Ego</mat-label>
+        <input matInput formControlName="alterEgo" placeholder="Ingresa el alter ego del héroe">
+        @if(heroForm.get('alterEgo')?.invalid && heroForm.get('alterEgo')?.touched) {
+          <mat-error>El alter ego es requerido</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="heroForm.invalid">Guardar</button>
+        <button mat-button type="button" (click)="router.navigate(['/'])">Cancelar</button>
+      </div>
+    </form>
+  }
+</div>
