@@ -1,59 +1,59 @@
-# RiuChallenge
+# HeroManager - Prueba Técnica Frontend (RIU)
+Esta aplicación es una Single Page Application (SPA) desarrollada con Angular 20 para la gestión y mantenimiento de superhéroes. El proyecto demuestra el uso de servicios avanzados, componentes de Angular Material, pruebas unitarias y contenedorización.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.13.
+## 🚀 Funcionalidades Implementadas
+Core (Requerimientos Obligatorios)
+CRUD Completo de Héroes: Registro, consulta, edición y eliminación de héroes.
 
-## Development server
+Persistencia en Memoria: Gestión de datos centralizada en servicios (sin backend externo).
 
-To start a local development server, run:
+Búsqueda Dinámica: Filtro en tiempo real que permite encontrar héroes por cualquier cadena de texto.
 
-```bash
+Listado Paginado: Visualización organizada con acciones de gestión (añadir, editar, borrar) integradas.
+
+Formularios con Validación: Control de entrada de datos para asegurar la integridad de la información.
+
+Confirmación de Acción: Diálogo de seguridad antes de eliminar un registro.
+
+Unit Testing: Pruebas unitarias para servicios y componentes principales.
+
+## Mejoras y Extras (Opcionales)
+Angular Material: Interfaz moderna y profesional basada en componentes oficiales de Material Design.
+
+Feedback de Usuario: Interceptor para mostrar indicador de carga (Loading) durante operaciones asíncronas.
+
+Directiva Uppercase: Directiva personalizada para forzar mayúsculas en el campo del nombre del héroe.
+
+Diseño Responsivo: Layout estructurado para adaptarse a diferentes tamaños de pantalla.
+
+## 🛠️ Cómo ejecutar la aplicación
+Opción 1: Desarrollo Local (Angular CLI)
+Requiere tener instalado Node.js y Angular CLI.
+
+### Instalar dependencias:
+
+
+npm install
+Iniciar el servidor de desarrollo:
+
+
 ng serve
-```
+Abrir el navegador en http://localhost:4200/.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Opción 2: Docker (Contenedorización)
+Requiere tener instalado Docker.
 
-## Code scaffolding
+Construir la imagen de Docker:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+docker build -t riu-challenge .
+Ejecutar el contenedor:
 
-```bash
-ng generate component component-name
-```
+docker run -p 8080:80 riu-challenge
+Acceder a la aplicación en http://localhost:8080.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🧪 Pruebas Unitarias
+Para ejecutar los tests automatizados y asegurar la calidad del código:
+ ng test
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## ✒️ Autor
+Stefano Racke - Prueba de Frontend para RIU Challenge.
