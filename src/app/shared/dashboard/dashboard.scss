@@ -1,0 +1,35 @@
+.dashboard-panel {
+  background-color: #f5f7fa;
+  padding: 1rem;
+  min-height: 100dvh;
+}
+.mat-toolbar {
+  background-color: white;
+  height: auto;
+  padding: 1rem 2rem;
+}
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.container {
+  img {
+    height: 40px;
+    width: 40px;
+  }
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  p {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+}

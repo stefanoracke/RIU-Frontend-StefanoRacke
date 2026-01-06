@@ -1,0 +1,20 @@
+<mat-toolbar>
+  <div class="container">
+    <div class="flex">
+      <img src="icon.png" alt="" />
+      <div>
+        <h2>HeroManager</h2>
+        <p>Prueba de Frontend Stefano Racke</p>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>
+<section class="dashboard-panel">
+  <div class="container">
+    <header>
+      <h1>{{ title }}</h1>
+      <p>{{ subtitle }}</p>
+    </header>
+    <ng-content></ng-content>
+  </div>
+</section>

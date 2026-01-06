@@ -7,7 +7,13 @@
 }
 
 .controls {
+  margin-top: 20px;
+  border-radius: 16px;
   display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
   gap: 1rem;
   align-items: center;
   margin-bottom: 1rem;
@@ -15,10 +21,27 @@
 
 .mat-mdc-row .mat-mdc-cell {
   border-bottom: none;
+  background-color: #fff;
   border-top: none;
 }
 
 .mat-mdc-row:hover .mat-mdc-cell {
   border-color: currentColor;
+  background-color: #fff;
 }
 
+.table-container {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.mat-mdc-header-row {
+  background-color: #0f2a44;
+  color: white;
+}
+
+.mat-mdc-paginator-outer-container {
+  background-color: #f9fafb;
+}

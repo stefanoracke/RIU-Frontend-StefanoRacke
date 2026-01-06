@@ -1,49 +1,76 @@
-@if(heroes$ | async; as response){
-<div class="controls">
-  <mat-form-field appearance="outline">
-    <mat-label>Buscar héroes</mat-label>
-    <input matInput [formControl]="searchControl" placeholder="Escribe el nombre del héroe..." />
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="addHero()">Agregar Superhéroe</button>
-</div>
+<app-dashboard title="Superhéroes" subtitle="Gestión y administración de héroes registrados">
+  @if(heroes$ | async; as response){
+  <div class="controls">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar héroes</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Escribe el nombre del héroe..." />
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addHero()">Agregar Superhéroe</button>
+  </div>
+  @if(heroService.isLoading()){
+  <app-skeleton-table [columns]="4" [rows]="8" />
+  }@else{
+  <div class="table-container">
+    <table mat-table [dataSource]="response.items" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
 
-@if(heroService.isLoading()){
-<app-skeleton-table [columns]="4" [rows]="8" />
-}@else{
+      <ng-container matColumnDef="power">
+        <th mat-header-cell *matHeaderCellDef>Poder</th>
+        <td mat-cell *matCellDef="let element">{{ element.power }}</td>
+      </ng-container>
 
-<table mat-table [dataSource]="response.items" class="mat-elevation-z8">
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Nombre</th>
-    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-  </ng-container>
+      <ng-container matColumnDef="alterEgo">
+        <th mat-header-cell *matHeaderCellDef>Alter ego</th>
+        <td mat-cell *matCellDef="let element">{{ element.alterEgo }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button color="accent" (click)="editHero(element)">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12.8953 0.449121C12.2965 -0.149707 11.3285 -0.149707 10.7297 0.449121L9.90664 1.26943L12.5836 3.94639L13.4066 3.12334C14.0055 2.52451 14.0055 1.55654 13.4066 0.957715L12.8953 0.449121ZM4.71406 6.46475C4.54727 6.63154 4.41875 6.83662 4.34492 7.06357L3.53555 9.4917C3.45625 9.72686 3.51914 9.98662 3.69414 10.1644C3.86914 10.3421 4.12891 10.4022 4.3668 10.3229L6.79492 9.51357C7.01914 9.43975 7.22422 9.31123 7.39375 9.14443L11.9684 4.56709L9.28867 1.8874L4.71406 6.46475ZM2.625 1.60576C1.17578 1.60576 0 2.78154 0 4.23076V11.2308C0 12.68 1.17578 13.8558 2.625 13.8558H9.625C11.0742 13.8558 12.25 12.68 12.25 11.2308V8.60576C12.25 8.12178 11.859 7.73076 11.375 7.73076C10.891 7.73076 10.5 8.12178 10.5 8.60576V11.2308C10.5 11.7147 10.109 12.1058 9.625 12.1058H2.625C2.14102 12.1058 1.75 11.7147 1.75 11.2308V4.23076C1.75 3.74678 2.14102 3.35576 2.625 3.35576H5.25C5.73398 3.35576 6.125 2.96475 6.125 2.48076C6.125 1.99678 5.73398 1.60576 5.25 1.60576H2.625Z"
+                fill="#1FB6B2"
+              />
+            </svg>
+          </button>
+          <button mat-button color="warn" (click)="deleteHero(element.id)">
+            <svg
+              width="13"
+              height="14"
+              viewBox="0 0 13 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.69687 0.483984L3.5 0.875H0.875C0.391016 0.875 0 1.26602 0 1.75C0 2.23398 0.391016 2.625 0.875 2.625H11.375C11.859 2.625 12.25 2.23398 12.25 1.75C12.25 1.26602 11.859 0.875 11.375 0.875H8.75L8.55312 0.483984C8.40547 0.185938 8.10195 0 7.77109 0H4.47891C4.14805 0 3.84453 0.185938 3.69687 0.483984ZM11.375 3.5H0.875L1.45469 12.7695C1.49844 13.4613 2.07266 14 2.76445 14H9.48555C10.1773 14 10.7516 13.4613 10.7953 12.7695L11.375 3.5Z"
+                fill="#EF4444"
+              />
+            </svg>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
 
-  <ng-container matColumnDef="power">
-    <th mat-header-cell *matHeaderCellDef>Poder</th>
-    <td mat-cell *matCellDef="let element">{{ element.power }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="alterEgo">
-    <th mat-header-cell *matHeaderCellDef>Alter ego</th>
-    <td mat-cell *matCellDef="let element">{{ element.alterEgo }}</td>
-  </ng-container>
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>Acciones</th>
-    <td mat-cell *matCellDef="let element">
-      <button mat-button color="accent" (click)="editHero(element)">Editar</button>
-      <button mat-button color="warn" (click)="deleteHero(element.id)">Eliminar</button>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
-}
-
-<mat-paginator
-  [length]="response.total"
-  [pageSize]="8"
-  [pageSizeOptions]="[8, 10, 20]"
-  (page)="onPageChange($event)"
-  aria-label="Seleccionar página"
->
-</mat-paginator>
-}
+    <mat-paginator
+      [length]="response.total"
+      [pageSize]="8"
+      [pageSizeOptions]="[8, 10, 20]"
+      (page)="onPageChange($event)"
+      aria-label="Seleccionar página"
+    >
+    </mat-paginator>
+  </div>
+  } }
+</app-dashboard>

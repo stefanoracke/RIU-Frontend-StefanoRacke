@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Uppercase } from '../../../../shared/uppercase';
 
 @Component({
   selector: 'app-hero-form',
@@ -19,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    Uppercase,
   ],
   templateUrl: './hero-form.html',
   styleUrl: './hero-form.scss',

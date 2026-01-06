@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { Hero } from '../../../../core/services/hero';
 import { AsyncPipe } from '@angular/common';
 import {
@@ -13,10 +13,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, debounceTime, startWith, switchMap, tap } from 'rxjs';
 import { SkeletonTable } from '../../../../shared/skeleton-table/skeleton-table';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialog } from '../../../../shared/confirm-dialog/confirm-dialog';
+import { Dashboard } from '../../../../shared/dashboard/dashboard';
 
 @Component({
   selector: 'app-hero-list',
@@ -27,17 +30,20 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogModule,
     SkeletonTable,
     ReactiveFormsModule,
+    Dashboard
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpanish }],
   templateUrl: './hero-list.html',
   styleUrl: './hero-list.scss',
 })
-export class HeroList implements AfterViewInit {
+export class HeroList {
   heroService = inject(Hero);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
+  dialog = inject(MatDialog);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   searchControl = new FormControl('');
@@ -61,24 +67,28 @@ export class HeroList implements AfterViewInit {
 
   displayedColumns: string[] = ['name', 'power', 'alterEgo', 'actions'];
 
-  ngAfterViewInit() {
-    // Inicializar el paginator
-  }
-
   editHero(hero: any) {
     this.router.navigate(['/heroes/edit', hero.id]);
   }
 
   deleteHero(id: number) {
-    this.heroService.deleteHero(id).subscribe({
-      next: () => {
-        this.snackBar.open('Héroe eliminado exitosamente', 'Cerrar', { duration: 3000 });
-        // Refrescar la lista
-        this.page$.next(1);
-      },
-      error: () => {
-        this.snackBar.open('Error al eliminar el héroe', 'Cerrar', { duration: 3000 });
-      },
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      data: { message: '¿Estás seguro de que quieres eliminar este héroe?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.heroService.deleteHero(id).subscribe({
+          next: () => {
+            this.snackBar.open('Héroe eliminado exitosamente', 'Cerrar', { duration: 3000 });
+            // Refrescar la lista
+            this.page$.next(1);
+          },
+          error: () => {
+            this.snackBar.open('Error al eliminar el héroe', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
     });
   }
 

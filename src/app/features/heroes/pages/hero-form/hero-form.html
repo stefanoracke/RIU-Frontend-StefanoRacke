@@ -10,7 +10,7 @@
     <form [formGroup]="heroForm" (ngSubmit)="save()">
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput formControlName="name" placeholder="Ingresa el nombre del héroe">
+        <input matInput formControlName="name" placeholder="Ingresa el nombre del héroe" appUppercase>
         @if(heroForm.get('name')?.invalid && heroForm.get('name')?.touched) {
           <mat-error>El nombre es requerido y debe tener al menos 2 caracteres</mat-error>
         }
