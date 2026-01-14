@@ -65,7 +65,7 @@
 
     <mat-paginator
       [length]="response.total"
-      [pageSize]="8"
+      [pageSize]="perPage$ | async"
       [pageSizeOptions]="[8, 10, 20]"
       (page)="onPageChange($event)"
       aria-label="Seleccionar página"

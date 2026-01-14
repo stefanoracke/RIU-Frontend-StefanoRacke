@@ -45,6 +45,7 @@ export class HeroList {
   snackBar = inject(MatSnackBar);
   dialog = inject(MatDialog);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  
 
   searchControl = new FormControl('');
   page$ = new BehaviorSubject<number>(1);
