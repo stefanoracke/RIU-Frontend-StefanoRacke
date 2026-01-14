@@ -8,7 +8,7 @@
     <button mat-raised-button color="primary" (click)="addHero()">Agregar Superhéroe</button>
   </div>
   @if(heroService.isLoading()){
-  <app-skeleton-table [columns]="4" [rows]="8" />
+  <app-skeleton-table [columns]="4" [rows]="(perPage$ | async) ?? 4" />
   }@else{
   <div class="table-container">
     <table mat-table [dataSource]="response.items" class="mat-elevation-z8">
@@ -66,9 +66,11 @@
     <mat-paginator
       [length]="response.total"
       [pageSize]="perPage$ | async"
-      [pageSizeOptions]="[8, 10, 20]"
+      [pageSizeOptions]="[5, 8, 10, 20]"
       (page)="onPageChange($event)"
       aria-label="Seleccionar página"
+      [pageIndex]="response.currentPage - 1"
+      showFirstLastButtons
     >
     </mat-paginator>
   </div>
