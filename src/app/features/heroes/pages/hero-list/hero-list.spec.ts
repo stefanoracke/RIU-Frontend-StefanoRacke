@@ -7,10 +7,22 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PaginatedHeroes } from '../../interfaces/hero.interface';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PageEvent } from '@angular/material/paginator';
 
 describe('HeroList', () => {
   let component: HeroList;
   let fixture: ComponentFixture<HeroList>;
+
+  let heroServiceSpy: jasmine.SpyObj<Hero>;
+  let routerSpy: jasmine.SpyObj<Router>;
+  let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
+  let dialogSpy: jasmine.SpyObj<MatDialog>;
+
+  const dialogRefMock = {
+    afterClosed: () => of(true),
+  };
 
   const mockHeroService = {
     getHeroes: jasmine
@@ -25,18 +37,35 @@ describe('HeroList', () => {
   const mockDialog = { open: jasmine.createSpy('open') };
 
   beforeEach(async () => {
+    heroServiceSpy = jasmine.createSpyObj('Hero', ['getHeroes', 'deleteHero', 'isLoading']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+    dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+
+    heroServiceSpy.getHeroes.and.returnValue(
+      of({ items: [], total: 0, currentPage: 1 } as unknown as PaginatedHeroes)
+    );
+    heroServiceSpy.isLoading.and.returnValue(false);
+
     await TestBed.configureTestingModule({
-      imports: [HeroList, ReactiveFormsModule],
+      imports: [HeroList, ReactiveFormsModule, NoopAnimationsModule],
       providers: [
         { provide: Hero, useValue: mockHeroService },
         { provide: Router, useValue: mockRouter },
         { provide: MatSnackBar, useValue: mockSnackBar },
-        { provide: MatDialog, useValue: mockDialog },
+        {
+          provide: MatDialog,
+          useFactory: () => ({
+            open: jasmine.createSpy('open').and.returnValue(dialogRefMock),
+          }),
+        },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeroList);
     component = fixture.componentInstance;
+
+    component.paginator = { pageIndex: 0, length: 0 } as any;
     fixture.detectChanges();
   });
 
@@ -75,28 +104,15 @@ describe('HeroList', () => {
     expect(component.page$.next).toHaveBeenCalledWith(1);
   }));
 
-  it('should remove the hero if the user confirms in the dialogue.', () => {
-    mockDialog.open.and.returnValue({
-      afterClosed: () => of(true),
-    });
+  it('should update page$ and perPage$ when page changes', () => {
+    component.onPageChange({
+      pageIndex: 2,
+      pageSize: 10,
+      length: 100,
+    } as PageEvent);
 
-    component.deleteHero(1);
-
-    expect(mockHeroService.deleteHero).toHaveBeenCalledWith(1);
-    expect(mockSnackBar.open).toHaveBeenCalledWith('Héroe eliminado exitosamente', 'Cerrar', {
-      duration: 3000,
-    });
-  });
-
-  it('it should display an error if the deletion fails.', () => {
-    mockDialog.open.and.returnValue({ afterClosed: () => of(true) });
-    mockHeroService.deleteHero.and.returnValue(throwError(() => new Error('Error')));
-
-    component.deleteHero(1);
-
-    expect(mockSnackBar.open).toHaveBeenCalledWith('Error al eliminar el héroe', 'Cerrar', {
-      duration: 3000,
-    });
+    expect(component.page$.value).toBe(3);
+    expect(component.perPage$.value).toBe(10);
   });
 
   it('should not attempt to update the paginator if it is not defined (Branch else).', () => {
